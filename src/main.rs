@@ -1,19 +1,20 @@
 extern crate daemonize;
 extern crate dirs;
 use daemonize::Daemonize;
-use std::fs::File;
-use std::fs::OpenOptions;
+use std::fs::{File, OpenOptions};
 use std::thread;
 use std::time::Duration;
 mod get_ip;
+mod read_file;
 
 fn main() {
-    let home = dirs::home_dir().unwrap().join(".iplogger/log.txt");
+    let iplogger_file = dirs::home_dir().unwrap().join(".iplogger/log.txt");
+    println!("{}", get_ip::get_last_ip(&iplogger_file));
     let stdout = OpenOptions::new()
         .create(true)
         .write(true)
         .append(true)
-        .open(home)
+        .open(iplogger_file)
         .unwrap();
     let stderr = File::create("/tmp/iplogger.err").unwrap();
     println!("Starting Iplogger");

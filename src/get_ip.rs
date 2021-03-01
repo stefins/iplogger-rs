@@ -5,20 +5,15 @@ use chrono::prelude::{DateTime, Local};
 pub fn log_ip() -> Result<(), Box<dyn std::error::Error>> {
     let local: DateTime<Local> = Local::now();
     let res = reqwest::blocking::get("https://ifconfig.me")?;
-    let currrent_ip = res.text().expect("Cannot parse the body");
-    if currrent_ip != get_last_ip(){
-        println!(
-            "{} - {}",
-            currrent_ip,
-            local
-        );
-    }
+    println!(
+        "{} - {}",
+        res.text().expect("Cannot decode the body"),
+        local
+    );
     Ok(())
 }
 
-// This function return the last Ip Address logged in the file
-pub fn get_last_ip() -> String {
-    let iplogger_file = dirs::home_dir().unwrap().join(".iplogger/log.txt");
+pub fn get_last_ip(iplogger_file: &std::path::PathBuf) -> String {
     let last_line =
         read_file::read_last_line(iplogger_file.to_str().expect("Cannot Convert to string"))
             .unwrap();

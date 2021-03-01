@@ -9,7 +9,6 @@ mod read_file;
 
 fn main() {
     let iplogger_file = dirs::home_dir().unwrap().join(".iplogger/log.txt");
-    println!("{}", get_ip::get_last_ip(&iplogger_file));
     let stdout = OpenOptions::new()
         .create(true)
         .write(true)

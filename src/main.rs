@@ -1,6 +1,6 @@
 extern crate daemonize;
 extern crate dirs;
-use daemonize::Daemonize;
+use daemonize::{Daemonize,DaemonizeError};
 use std::fs::{File, OpenOptions};
 use std::thread;
 use std::time::Duration;
@@ -30,6 +30,7 @@ fn main() {
             get_ip::log_ip().unwrap();
             thread::sleep(Duration::from_secs(60 * 20));
         },
+        Err(DaemonizeError::LockPidfile(_)) => println!("Iplogger is already running?"),
         Err(e) => println!("Error, {}", e),
     }
 }

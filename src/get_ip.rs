@@ -20,9 +20,10 @@ pub fn log_ip() -> Result<(), Box<dyn std::error::Error>> {
 // This function return the last Ip Address logged in the file
 pub fn get_last_ip() -> Result<String,Error> {
     let iplogger_file = dirs::home_dir().unwrap().join(".iplogger/log.txt");
-    let last_line =
-        read_file::read_last_line(iplogger_file.to_str().expect("Cannot Convert to string"))
-            .unwrap();
+    let last_line = match read_file::read_last_line(iplogger_file.to_str().expect("Cannot Convert to string")){
+        Ok(line) =>line ,
+        Err(_) => String::from("127.0.0.1 - date")
+    };
     let ip = last_line.split(" - ").next();
     match ip{
         Some(val) => Ok(String::from(val)),

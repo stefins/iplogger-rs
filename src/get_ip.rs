@@ -1,11 +1,18 @@
 use crate::read_file;
 use std::io::{Error,ErrorKind};
 use chrono::prelude::{DateTime, Local};
+use std::time::Duration;
 
 // This function will print the Ip Address with time
 pub fn log_ip() -> Result<(), Box<dyn std::error::Error>> {
     let local: DateTime<Local> = Local::now();
-    let res = reqwest::blocking::get("https://ifconfig.me")?;
+    let client = reqwest::blocking::Client::builder()
+    .timeout(Duration::from_secs(10))
+    .build()?;
+    let res = match client.get("https://ifconfig.me").send(){
+        Ok(res) => {res},
+        Err(_) => {return Ok(())},
+    };
     let currrent_ip = res.text().expect("Cannot parse the body");
     if currrent_ip != get_last_ip()?{
         println!(

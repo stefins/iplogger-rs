@@ -1,14 +1,15 @@
 extern crate daemonize;
 extern crate dirs;
-use daemonize::{Daemonize,DaemonizeError};
-use std::fs::{File, OpenOptions,create_dir_all};
+use daemonize::{Daemonize, DaemonizeError};
+use std::fs::{create_dir_all, File, OpenOptions};
 use std::thread;
 use std::time::Duration;
 mod get_ip;
 mod read_file;
 
 fn main() {
-    create_dir_all(dirs::home_dir().unwrap().join(".iplogger")).expect("Cannot create the directory");
+    create_dir_all(dirs::home_dir().unwrap().join(".iplogger"))
+        .expect("Cannot create the directory");
     let iplogger_file = dirs::home_dir().unwrap().join(".iplogger/log.txt");
     let stdout = OpenOptions::new()
         .create(true)

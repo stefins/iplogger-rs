@@ -9,7 +9,7 @@ pub fn log_ip() -> Result<(), Box<dyn std::error::Error>> {
     let client = reqwest::blocking::Client::builder()
         .timeout(Duration::from_secs(10))
         .build()?;
-    let res = match client.get("https://ifconfig.me").send() {
+    let res = match client.get("https://ifconfig.me/ip").send() {
         Ok(res) => res,
         Err(_) => return Ok(()),
     };
